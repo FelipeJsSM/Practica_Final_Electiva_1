@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{book.imagePath}}" class="img-fluid" style="width: 275px; height: 314px;" alt="{{book.title}}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="mb-0">{{book.title}}</h3>
+                                <a href="/" class="btn btn-outline-black">Back</a>
+                            </div>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Published:</strong> {{book.published}}</li>
+                            <li class="list-group-item"><strong>Category:</strong> {{book.category.dataValues.name}}</li>
+                            <li class="list-group-item"><strong>Author:</strong> {{book.author.dataValues.name}}</li>
+                            <li class="list-group-item"><strong>Editorial:</strong> {{book.editorial.dataValues.name}}</li>
+                            <li class="list-group-item"><strong>Editorial's Country:</strong> {{book.editorial.dataValues.country}}</li>
+                            <li class="list-group-item"><strong>Editorial's Phone:</strong> {{book.editorial.dataValues.phone}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

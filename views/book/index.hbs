@@ -1,0 +1,39 @@
+<h1>Lista de Libros</h1>
+
+<div class="row mt-2 mb-2">
+    <div class="col-12 col-sm-4">
+        <a href="/book/create" class="btn btn-success">Agregar Libro</a>
+    </div>
+</div>
+
+<hr>
+
+{{#if books}}
+<div class="row">
+    {{#each books as |book|}}
+    <div class="col-12 col-sm-4">
+        <div class="card mb-3">
+            <img src="{{book.imagePath}}" class="img-fluid" style="width: 415px; height: 250px;" alt="{{book.title}}"/>
+            <div class="card-body">
+                <h5 class="card-title">Nombre: {{book.title}}</h5>
+                <p class="card-text">Categoria: {{book.category.dataValues.name}} - Editorial:
+                    {{book.editorial.dataValues.name}}</p>
+                <p class="card-text">Publicado: {{book.published}} - Autor:
+                    {{book.author.dataValues.name}}</p>
+
+                <div class="mt-2">
+                    <a href="/book/edit/{{book.id}}?edit=true" class="btn btn-primary float-end">Editar</a>
+
+                    <form method="post" action="/book/delete" class="form-delete">
+                        <input type="hidden" name="bookId" value="{{book.id}}">
+                        <button type="submit" class="btn btn-danger float-end me-2 delete-book" title="Delete">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+{{else}}
+<h1>No se encontraron Libros</h1>
+{{/if}}

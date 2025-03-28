@@ -1,0 +1,35 @@
+<h1>Mantenimiento de Editorial</h1>
+
+<div class="row mt-2 mb-2">
+    <div class="col-12 col-sm-4">
+        <a href="/editorial/create" class="btn btn-success">Agregar Autor</a>
+    </div>
+</div>
+
+<hr>
+
+{{#if editorials}}
+<div class="row">
+    {{#each editorials as |editorial|}}
+    <div class="col-12 col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Editorial: {{editorial.name}}</h5>
+                <p class="card-text">Telefono: {{editorial.phone}}</p>
+                <p class="card-text">Ciudad: {{editorial.country}}</p>
+                <p class="card-text">Libros: {{editorial.books.length}}</p>
+            </div>
+            <div class="mb-2 text-center">
+                <a href="/editorial/edit/{{editorial.id}}?edit=true" title="Edit" class="btn btn-primary float-end">Editar</a>
+                <form method="post" action="/editorial/delete/:editorialId" class="form-delete">
+                    <input type="hidden" name="editorialId" value="{{editorial.id}}">
+                    <button type="submit" class="btn btn-danger float-end me-2 delete-editorial"title="Delete">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+{{else}}
+<h3 class="mt-3 text-center">No hay Editoriales registradas</h3>
+{{/if}}

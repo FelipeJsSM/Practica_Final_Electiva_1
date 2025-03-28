@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-12 col-sm-6 offset-sm-3">
+        <div class="card">
+            <div class="card-header bg-primary text-light">
+                {{#if editMode}}Editar Editorial{{else}}Crear Editorial{{/if}}
+            </div>
+            <div class="card-body">
+                <form class="form-submit-editorial" method="POST"
+                    action="/editorial/{{#if editMode}}edit{{else}}create{{/if}}">
+
+                    {{#if editMode}}
+                    <input type="hidden" name="id" value="{{editorial.id}}">
+                    {{/if}}
+
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name:</label>
+                        <input type="text" id="name" class="form-control" name="name" {{#if
+                            editMode}}value="{{editorial.name}}" {{/if}} />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone:</label>
+                        <input type="text" id="phone" class="form-control" name="phone" {{#if
+                            editMode}}value="{{editorial.phone}}" {{/if}} />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country:</label>
+                        <input type="text" id="country" class="form-control" name="country" {{#if
+                            editMode}}value="{{editorial.country}}" {{/if}} />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary float-end">Guardar</button>
+                    <a href="/editorial/" class="btn btn-warning float-end me-2">Volver</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
