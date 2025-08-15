@@ -3,8 +3,14 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "node tests/health.int.test.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "jest --runInBand",
+    "lint": "eslint ."
+  },
+  "jest": {
+    "setupFiles": ["<rootDir>/tests/setup-env.js"],
+    "testEnvironment": "node"
   },
   "author": "",
   "license": "ISC",
