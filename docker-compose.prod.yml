@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  app:
+    image: REGISTRY_USER_OR_ORG/bookapp:latest   # ← cambia según uses Docker Hub o GHCR
+    env_file: .env
+    ports:
+      - "8200:8200"
+    volumes:
+      - ./public/images:/app/public/images
+      - ./database:/app/database
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8200/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
