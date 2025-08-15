@@ -13,7 +13,6 @@ const compareHelper = require("./util/helpers/hbs/SameValue");
 const healthRouter = require("./routes/health");
 const indexRouter = require("./routes/index");
 
-// ⚠️ Vuelve a importar sequelize si lo usas (relaciones/sync)
 const sequelize = require("./context/appContext");
 
 const Authors = require("./models/Authors");
@@ -26,10 +25,12 @@ const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
   format: winston.format.json(),
 });
+if (process.env.NODE_ENV === "test") {
+  logger.silent = true;
+}
 
 const app = express();
 
-// Métricas (expone /metrics)
 app.use(promBundle({ includeMethod: true, includePath: true }));
 
 app.engine(
@@ -48,20 +49,23 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static(path.join(__dirname, "public")));
 
-// Multer (sin cambios)
+const skipPathsRegex = /^\/(metrics|favicon\.ico|public\/.*)$/;
+app.use((req, _res, next) => {
+  if (!skipPathsRegex.test(req.path)) {
+    logger.info({ msg: "HTTP", method: req.method, path: req.path });
+  }
+  next();
+});
+
 const imageStorage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "public/images"),
   filename: (req, file, cb) => cb(null, `${uuidv4()}-${file.originalname}`),
 });
 app.use(multer({ storage: imageStorage }).single("image"));
 
-// ✅ Monta /health antes del indexRouter
 app.use(healthRouter);
-
-// Resto de rutas
 app.use(indexRouter);
 
-// Relaciones (si las usas aquí)
 Books.belongsTo(Categories, { constraint: true, onDelete: "CASCADE" });
 Categories.hasMany(Books);
 Books.belongsTo(Authors, { constraint: true, onDelete: "CASCADE" });
@@ -71,14 +75,21 @@ Publishers.hasMany(Books);
 
 const PORT = process.env.PORT || 8200;
 
-// En producción y dev: arranca. En test: solo exporta app.
+
+logger.info({ msg: "BookApp boot", env: process.env.NODE_ENV, port: PORT });
+
 if (process.env.NODE_ENV !== "test") {
   sequelize
     .sync()
     .then(() => {
-      app.listen(PORT, () => console.log(`Servidor escuchando en el puerto ${PORT}`));
+      app.listen(PORT, () =>
+        logger.info({ msg: `Servidor escuchando en el puerto ${PORT}` })
+      );
     })
-    .catch(err => console.error(err));
+    .catch((err) => {
+      logger.error({ msg: "DB sync error", err });
+      console.error(err);
+    });
 }
 
 module.exports = app;

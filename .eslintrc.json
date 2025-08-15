@@ -2,9 +2,15 @@
   "env": { "node": true, "es2021": true, "jest": true },
   "extends": ["eslint:recommended"],
   "parserOptions": { "ecmaVersion": 12 },
+  "ignorePatterns": ["node_modules/", "public/", "database/", "coverage/"],
   "rules": {
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-    "eqeqeq": "error"
+    "eqeqeq": "error",
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "ignoreRestSiblings": true }]
   },
-  "ignorePatterns": ["node_modules/", "public/", "database/", "coverage/"]
+  "overrides": [
+    {
+      "files": ["controllers/**/*.js"],
+      "rules": { "no-unused-vars": "off" }
+    }
+  ]
 }
